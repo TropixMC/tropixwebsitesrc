@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TropixMC</title>
+    <meta name="description" content="Experience the next generation of Prison and Skyblock on TropixMC. Custom features, dedicated staff, and a friendly community.">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="TropixMC">
+    <meta property="og:description" content="PrisonBlock in Development. Join the next generation of Minecraft servers.">
+    <meta property="og:image" content="https://tropixmc.net/assets/logo.png">
+    <meta property="og:url" content="https://tropixmc.net">
+    <meta property="og:site_name" content="TropixMC">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TropixMC">
+    <meta name="twitter:description" content="PrisonBlock in Development">
+    <meta name="twitter:image" content="https://tropixmc.net/assets/logo.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tropix: {
+                            cyan: '#0de2ec',
+                            green: '#43f7a1',
+                            lime: '#a9f555',
+                            yellow: '#f0e33e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --color-1: #0de2ec;
+            --color-2: #43f7a1;
+            --color-3: #a9f555;
+            --color-4: #f0e33e;
+            --glow-cyan: 0 0 20px rgba(13, 226, 236, 0.8), 0 0 40px rgba(13, 226, 236, 0.4);
+            --glow-green: 0 0 20px rgba(67, 247, 161, 0.8), 0 0 40px rgba(67, 247, 161, 0.4);
+            --glow-yellow: 0 0 20px rgba(240, 227, 62, 0.8), 0 0 40px rgba(240, 227, 62, 0.4);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #050b0d;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        body::-webkit-scrollbar { display: none; }
+
+        .tropix-gradient {
+            background: linear-gradient(90deg, var(--color-1) 0%, var(--color-2) 59%, var(--color-3) 78%, var(--color-4) 100%);
+        }
+        .tropix-text-gradient {
+            background: linear-gradient(90deg, var(--color-1) 0%, var(--color-2) 59%, var(--color-3) 78%, var(--color-4) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(67, 247, 161, 0.3));
+        }
+
+        .hero-bg {
+            background:
+                linear-gradient(to bottom, rgba(5, 11, 13, 0.6), rgba(5, 11, 13, 0.95)),
+                url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallpapers.com%2Fimages%2Fhd%2Ftropical-beach-with-palm-trees-ocean-waves-50e05ygem779p0jd.jpg&f=1&nofb=1&ipt=65d45df46e8ff7c169e94800dd95f061e01bdcc38bc6c60e7f296f3d54c0eb19?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg, rgba(0, 0, 0, 0.04) 0px, rgba(0, 0, 0, 0.04) 1px,
+                transparent 1px, transparent 3px
+            );
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .glass-panel {
+            background: rgba(10, 16, 20, 0.6);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+                0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-panel:hover {
+            border-color: rgba(67, 247, 161, 0.3);
+            background: rgba(10, 16, 20, 0.75);
+            transform: translateY(-4px);
+            box-shadow:
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+                0 20px 40px -10px rgba(67, 247, 161, 0.1);
+        }
+
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .btn-primary:hover::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(67, 247, 161, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .chromatic-glow { transition: all 0.3s ease; }
+        .chromatic-glow:hover {
+            text-shadow: 0 0 15px rgba(67, 247, 161, 0.5);
+            color: var(--color-2);
+        }
+
+        .pulse-online { animation: pulseStatus 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulseStatus {
+            0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(67, 247, 161, 0.6); }
+            50% { opacity: 0.5; box-shadow: 0 0 0px rgba(67, 247, 161, 0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #050b0d;
+            border: 1px solid var(--color-2);
+            box-shadow: 0 0 20px rgba(67, 247, 161, 0.2);
+            color: #fff;
+            text-align: center;
+            border-radius: 12px;
+            padding: 16px;
+            position: fixed;
+            z-index: 100;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+        }
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        #mobile-menu {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #mobile-menu.hidden-menu {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #page-loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            background: #050b0d;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #page-loader.hidden { opacity: 0; visibility: hidden; }
+        
+        .ocean-scene-pro { position: relative; width: 400px; height: 300px; background: linear-gradient(to bottom, #1e3a8a, #0c4a6e, #111827); overflow: hidden; border-radius: 1vmax; border: 3px solid #a8dadc; box-shadow: 0 0 3vmax rgba(168, 218, 220, 0.3); }
+        .light-caustics { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; background: radial-gradient(ellipse 40% 50% at 20% 40%, rgba(255, 255, 255, 0.1), transparent), radial-gradient(ellipse 30% 40% at 80% 70%, rgba(255, 255, 255, 0.08), transparent); animation: caustics-flow 20s linear infinite; }
+        .sand-floor { position: absolute; bottom: 0; left: 0; width: 100%; height: 8vmax; background: #c2b280; border-radius: 50% 40% 0 0 / 10vmax 12vmax 0 0; z-index: 1; }
+        .seaweed { position: absolute; width: 100%; height: 100%; bottom: 0; z-index: 2; }
+        .seaweed__plant { position: absolute; bottom: 3vmax; width: 1vmax; background: linear-gradient(to top, #004d40, #00796b); border-radius: 0.5vmax; transform-origin: bottom center; animation: seaweed-sway 10s ease-in-out infinite; }
+        .seaweed__plant--1 { left: 10%; height: 15vmax; animation-delay: -2s; }
+        .seaweed__plant--2 { left: 80%; height: 20vmax; animation-delay: -5s; transform: scaleX(-1); }
+        .seaweed__plant--3 { left: 45%; height: 12vmax; animation-delay: -8s; }
+        .bubbles { position: absolute; width: 100%; height: 100%; z-index: 5; }
+        .bubble { position: absolute; bottom: -5vmax; border: 0.15vmax solid rgba(255, 255, 255, 0.4); border-radius: 50%; animation: rise 15s linear infinite; }
+        .bubble--1 { left: 10%; width: 1.5vmax; height: 1.5vmax; animation-duration: 12s; }
+        .bubble--2 { left: 30%; width: 2.5vmax; height: 2.5vmax; animation-duration: 18s; }
+        .fish { position: absolute; z-index: 10; filter: drop-shadow(0 0.2vmax 0.5vmax rgba(0, 0, 0, 0.3)); }
+        .fish--svg { width: 12vmax; height: 12vmax; }
+        .fish--1 { animation: swim-path-1 20s linear infinite -2s; }
+        .fish-tail { transform-origin: 98px 258px; animation: wag-tail-svg 0.8s ease-in-out infinite; }
+        
+        @keyframes caustics-flow { 0%, 100% { transform: translate(0, 0) scale(1.1); } 50% { transform: translate(2vmax, 5vmax) scale(1); } }
+        @keyframes seaweed-sway { 0%, 100% { transform: rotate(5deg); } 50% { transform: rotate(-5deg); } }
+        @keyframes rise { 0% { transform: translateY(0) translateX(0); opacity: 1; } 100% { transform: translateY(-60vmax) translateX(-2vmax); opacity: 0; } }
+        @keyframes wag-tail-svg { 0%, 100% { transform: rotate(15deg) skewX(10deg); } 50% { transform: rotate(-15deg) skewX(-10deg); } }
+        @keyframes swim-path-1 { 0% { transform: translate(-20vmax, 10vmax) rotateY(0deg); } 49% { transform: translate(60vmax, 15vmax) rotateY(0deg); } 50% { transform: translate(60vmax, 15vmax) rotateY(180deg); } 99% { transform: translate(-20vmax, 10vmax) rotateY(180deg); } 100% { transform: translate(-20vmax, 10vmax) rotateY(180deg); } }
+    </style>
+</head>
+<body class="selection:bg-tropix-green selection:text-black">
+
+    <div id="page-loader">
+        <div class="ocean-scene-pro">
+            <div class="light-caustics"></div>
+            <div class="bubbles">
+                <div class="bubble bubble--1"></div>
+                <div class="bubble bubble--2"></div>
+            </div>
+            <div class="sand-floor"></div>
+            <div class="seaweed">
+                <div class="seaweed__plant seaweed__plant--1"></div>
+                <div class="seaweed__plant seaweed__plant--2"></div>
+                <div class="seaweed__plant seaweed__plant--3"></div>
+            </div>
+            <div class="fish fish--svg fish--1">
+                <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                        <path d="M155.225,223.377c0,0,37.189-90.859,144.589-91.34c100.768-0.451,124.753,59.527,124.753,59.527 L155.225,223.377z" style="fill: #3c66b1"></path>
+                        <path d="M267.842,339.889c-89.137-24.416-179.415-81.052-179.415-81.052s140.421-92.038,253.44-92.038 s162.587,121.482,162.587,121.482s-49.567,62.594-162.587,62.594c-7.464,0-15.002-0.401-22.575-1.151L267.842,339.889z" style="fill: #8ec1ed"></path>
+                        <path d="M98.489,258.837c0,0-0.526-31.012-18.339-44.472c-17.814-13.461-72.604-25.84-72.604-25.84 s26.962,52.578,44.774,66.038c0.024,0.018,0.048,0.036,0.072,0.054c2.843,2.135,2.843,6.303,0,8.438 c-0.024,0.018-0.048,0.036-0.072,0.054c-17.813,13.461-44.774,66.039-44.774,66.039s54.79-12.379,72.604-25.84 C97.963,289.849,98.489,258.837,98.489,258.837h-0.001H98.489z" style="fill: #52a2e7" class="fish-tail"></path>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <nav class="fixed w-full z-50 top-0 left-0 px-4 md:px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center glass-panel px-6 md:px-8 py-3 md:py-4 rounded-2xl">
+            <div class="flex items-center gap-3">
+                <i data-lucide="waves" class="w-8 h-8 text-tropix-cyan"></i>
+                <span class="text-2xl font-black italic tracking-tighter tropix-text-gradient pr-2">TropixMC</span>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-8 font-semibold text-sm uppercase tracking-widest text-gray-300">
+                <a href="#" class="chromatic-glow transition">Home</a>
+                <a href="#server-info" class="chromatic-glow transition">Info</a>
+                <a href="https://docs.google.com/document/d/1Wpve7QOOmfImlnUEHbx5zH-Jm5u8GHSad2yqY-45r0A/edit" target="_blank" class="chromatic-glow transition">Rules</a>
+                <a href="https://discord.gg/tropixmc" target="_blank" class="chromatic-glow transition">Discord</a>
+                <a href="https://store.tropixmc.net/" target="_blank" class="chromatic-glow transition text-tropix-green">Store</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="hidden lg:flex items-center gap-3 bg-black/40 px-5 py-2.5 rounded-full border border-white/5 shadow-inner">
+                    <div class="w-2.5 h-2.5 bg-tropix-green rounded-full pulse-online"></div>
+                    <span class="text-xs font-bold text-gray-200 uppercase tracking-wide">
+                        <span id="player-count" class="text-white">Loading</span> Online
+                    </span>
+                </div>
+                <button id="mobile-menu-btn" class="md:hidden text-white hover:text-tropix-cyan transition p-2">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-black/95 backdrop-blur-xl z-40 hidden-menu flex flex-col items-center justify-center pt-20">
+        <div class="flex flex-col items-center gap-8 font-black text-2xl uppercase tracking-widest w-full px-6">
+            <a href="#" class="mobile-link text-white hover:text-tropix-cyan w-full text-center py-4 border-b border-white/10">Home</a>
+            <a href="#server-info" class="mobile-link text-white hover:text-tropix-green w-full text-center py-4 border-b border-white/10">Server Info</a>
+            <a href="https://discord.gg/tropixmc" target="_blank" class="mobile-link text-white hover:text-tropix-lime w-full text-center py-4 border-b border-white/10">Discord</a>
+            <a href="https://store.tropixmc.net/" target="_blank" class="mobile-link text-tropix-green w-full text-center py-4">Store</a>
+        </div>
+    </div>
+
+    <section class="relative min-h-screen flex items-center justify-center hero-bg pt-20 px-6">
+        <div class="max-w-4xl w-full text-center relative z-10 reveal">
+            <div class="inline-block px-5 py-1.5 mb-8 rounded-full bg-white/5 border border-white/10 text-xs font-bold uppercase tracking-[0.25em] text-tropix-cyan shadow-lg backdrop-blur-sm">
+                PrisonBlock In Development
+            </div>
+            
+            <h1 class="text-5xl md:text-8xl lg:text-9xl font-black italic uppercase leading-none mb-6 drop-shadow-2xl">
+                Welcome to<br>
+                <span class="tropix-text-gradient pr-2">TropixMC</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-12 leading-relaxed font-light drop-shadow-md">
+                Experience the next evolution of Minecraft Prison. Custom mechanics, dedicated staff, and a community built for longevity. Your tropical sentence begins here.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
+                <button onclick="document.querySelector('#server-info').scrollIntoView()" class="btn-primary tropix-gradient text-black px-10 py-4 rounded-2xl font-extrabold text-lg uppercase tracking-wider w-full sm:w-auto shadow-xl">
+                    Server Details
+                </button>
+                <button onclick="copyIP()" class="btn-primary bg-black/40 hover:bg-black/60 text-white backdrop-blur-md border border-white/10 px-10 py-4 rounded-2xl font-extrabold text-lg uppercase tracking-wider w-full sm:w-auto flex items-center justify-center gap-3 shadow-xl group">
+                    <span id="ip-text">play.tropixmc.net</span>
+                    <i data-lucide="copy" class="w-5 h-5 text-tropix-cyan group-hover:scale-110 transition-transform"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="server-info" class="py-32 px-6 max-w-7xl mx-auto scroll-mt-20">
+        <div class="text-center mb-16 reveal">
+            <h2 class="text-4xl md:text-6xl font-black uppercase mb-4 italic tracking-tight">
+                Server <span class="tropix-text-gradient pr-2">Information</span>
+            </h2>
+            <div class="w-24 h-1 tropix-gradient mx-auto rounded-full"></div>
+        </div>
+
+        <div class="glass-panel rounded-[2.5rem] p-8 md:p-14 reveal">
+            <div class="mb-14 overflow-hidden rounded-2xl bg-black/40 p-1 border border-white/10 shadow-2xl">
+                <iframe style="width:728px;height:90px;max-width:100%;border:none;display:block;margin:auto" src="https://namemc.com/server/play.tropixmc.net/embed" title="NameMC Server Status"></iframe>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <div class="space-y-8">
+                    <h3 class="text-2xl font-black uppercase italic flex items-center gap-3 text-white">
+                        <div class="p-2 bg-tropix-cyan/10 rounded-lg border border-tropix-cyan/20">
+                            <i data-lucide="shield" class="text-tropix-cyan w-6 h-6"></i>
+                        </div>
+                        Why TropixMC?
+                    </h3>
+                    <p class="text-gray-400 leading-relaxed text-lg">
+                        We aren't just another server. TropixMC is built from the ground up to redefine the Prison and Skyblock genre with performance and player satisfaction in mind.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:border-tropix-green/30 transition-colors">
+                            <i data-lucide="zap" class="text-tropix-green w-6 h-6 shrink-0 mt-0.5"></i>
+                            <div>
+                                <h4 class="text-white font-bold uppercase tracking-wide text-sm mb-1">Custom Built</h4>
+                                <p class="text-gray-400 text-sm">Features developed specifically for our players.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:border-tropix-green/30 transition-colors">
+                            <i data-lucide="gem" class="text-tropix-green w-6 h-6 shrink-0 mt-0.5"></i>
+                            <div>
+                                <h4 class="text-white font-bold uppercase tracking-wide text-sm mb-1">Quality of Life</h4>
+                                <p class="text-gray-400 text-sm">Premium features as a standard, not a luxury.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="space-y-8">
+                    <h3 class="text-2xl font-black uppercase italic flex items-center gap-3 text-white">
+                        <div class="p-2 bg-tropix-yellow/10 rounded-lg border border-tropix-yellow/20">
+                            <i data-lucide="globe" class="text-tropix-yellow w-6 h-6"></i>
+                        </div>
+                        Connect
+                    </h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <a href="https://discord.gg/tropixmc" target="_blank" class="flex items-center justify-between p-5 rounded-xl bg-[#5865F2]/10 border border-[#5865F2]/30 hover:bg-[#5865F2]/20 hover:border-[#5865F2] transition-all group">
+                            <div class="flex items-center gap-4">
+                                <i data-lucide="message-square" class="text-[#5865F2] w-6 h-6"></i>
+                                <span class="font-bold uppercase tracking-wider text-white">Official Discord</span>
+                            </div>
+                            <i data-lucide="arrow-up-right" class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors"></i>
+                        </a>
+                        
+                        <a href="https://store.tropixmc.net/" target="_blank" class="flex items-center justify-between p-5 rounded-xl bg-tropix-green/10 border border-tropix-green/30 hover:bg-tropix-green/20 hover:border-tropix-green transition-all group">
+                            <div class="flex items-center gap-4">
+                                <i data-lucide="shopping-cart" class="text-tropix-green w-6 h-6"></i>
+                                <span class="font-bold uppercase tracking-wider text-white">Web Store</span>
+                            </div>
+                            <i data-lucide="arrow-up-right" class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors"></i>
+                        </a>
+
+                        <div class="p-5 rounded-xl bg-white/5 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div class="flex items-center gap-4">
+                                <i data-lucide="server" class="text-tropix-cyan w-6 h-6"></i>
+                                <div>
+                                    <div class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Server IP</div>
+                                    <div class="font-bold text-white tracking-wide">play.tropixmc.net</div>
+                                </div>
+                            </div>
+                            <button onclick="copyIP()" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-black uppercase tracking-widest text-white transition-colors flex items-center justify-center gap-2">
+                                <i data-lucide="copy" class="w-4 h-4"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-16 border-t border-white/5 bg-black/40 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="flex items-center justify-center gap-3 mb-8">
+                <i data-lucide="waves" class="w-6 h-6 text-tropix-cyan"></i>
+                <span class="text-xl font-black italic tracking-tighter tropix-text-gradient pr-2">TropixMC</span>
+            </div>
+
+            <div class="flex justify-center gap-8 mb-8 text-gray-500 text-sm uppercase font-bold tracking-[0.2em]">
+                <a href="https://store.tropixmc.net/" class="hover:text-white transition">Store</a>
+                <a href="https://discord.gg/tropixmc" class="hover:text-white transition">Discord</a>
+                <a href="https://docs.google.com/document/d/1Wpve7QOOmfImlnUEHbx5zH-Jm5u8GHSad2yqY-45r0A/edit" target="_blank" class="hover:text-white transition">Rules</a>
+            </div>
+            <p class="max-w-xl mx-auto text-gray-600 text-xs leading-relaxed font-medium">
+                TropixMC &copy; 2026. All rights reserved.<br>
+                We are not affiliated with Mojang AB. Minecraft is a trademark of Mojang Synergies AB.
+            </p>
+        </div>
+    </footer>
+
+    <div id="toast" class="flex items-center gap-3 font-bold">
+        <i data-lucide="check-circle-2" class="text-tropix-green w-5 h-5"></i>
+        IP copied to clipboard!
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('page-loader');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.classList.add('hidden'), 600);
+            }, 800);
+        });
+
+        async function fetchPlayerCount() {
+            const ip = "play.tropixmc.net";
+            const element = document.getElementById('player-count');
+            try {
+                const response = await fetch(`https://api.mcsrvstat.us/3/${ip}`);
+                const data = await response.json();
+                
+                if (data.online) {
+                    element.innerText = `${data.players.online}/${data.players.max}`;
+                } else {
+                    element.innerText = "Offline";
+                    element.parentElement.previousElementSibling.classList.remove('pulse-online', 'bg-tropix-green');
+                    element.parentElement.previousElementSibling.classList.add('bg-red-500');
+                }
+            } catch (error) {
+                element.innerText = "???";
+            }
+        }
+        fetchPlayerCount();
+        setInterval(fetchPlayerCount, 60000);
+
+        function copyIP() {
+            const ip = "play.tropixmc.net";
+            navigator.clipboard.writeText(ip).then(() => {
+                const toast = document.getElementById("toast");
+                toast.classList.add("show");
+                setTimeout(() => {
+                    toast.classList.remove("show");
+                }, 3000);
+            });
+        }
+
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('hidden-menu');
+            const icon = mobileMenu.classList.contains('hidden-menu') ? 'menu' : 'x';
+            mobileBtn.innerHTML = `<i data-lucide="${icon}" class="w-6 h-6"></i>`;
+            lucide.createIcons();
+            document.body.style.overflow = mobileMenu.classList.contains('hidden-menu') ? 'auto' : 'hidden';
+        }
+
+        mobileBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((element) => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
