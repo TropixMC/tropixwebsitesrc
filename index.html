@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TropixMC — Tropical Minecraft Server</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #111416;
+      --surface:  #1a1d21;
+      --surface2: #21262c;
+      --border:   #2a3038;
+      --teal:     #00c8c0;
+      --teal-dim: #009e97;
+      --teal-glow:rgba(0,200,192,0.18);
+      --yellow:   #f0d050;
+      --text:     #e8edf2;
+      --muted:    #7a8898;
+      --red:      #e05050;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      background: rgba(17,20,22,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 14px;
+      color: var(--teal);
+      letter-spacing: 0.03em;
+      text-decoration: none;
+    }
+    .nav-logo img { height: 36px; image-rendering: pixelated; }
+    .nav-links { display: flex; align-items: center; gap: 8px; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface2); }
+    .nav-btn {
+      background: var(--teal) !important;
+      color: #0a1a19 !important;
+      padding: 10px 22px !important;
+      border-radius: 8px !important;
+      font-weight: 900 !important;
+      font-size: 13px !important;
+      transition: filter 0.2s !important;
+    }
+    .nav-btn:hover { filter: brightness(1.15) !important; background: var(--teal) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 100px 24px 80px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 30%, rgba(0,200,192,0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 80% 60% at 50% 80%, rgba(0,80,80,0.18) 0%, transparent 70%),
+        var(--bg);
+    }
+    /* Subtle minecraft-y grid lines */
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,192,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,192,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-palm {
+      width: 140px;
+      filter: drop-shadow(0 0 32px rgba(0,200,192,0.4));
+      animation: float 4s ease-in-out infinite;
+      margin-bottom: 24px;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0px); }
+      50%      { transform: translateY(-12px); }
+    }
+    .hero-tag {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      color: var(--teal);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .hero-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(28px, 5vw, 52px);
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 20px;
+      text-shadow: 0 0 40px rgba(0,200,192,0.3);
+    }
+    .hero-title span { color: var(--teal); }
+    .hero-desc {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin: 0 auto 36px;
+    }
+    /* IP copy box */
+    .ip-box {
+      display: inline-flex; align-items: center; gap: 0;
+      border: 1.5px solid var(--teal);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 40px;
+      box-shadow: 0 0 24px rgba(0,200,192,0.15);
+    }
+    .ip-label {
+      background: var(--teal);
+      color: #0a1a19;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      padding: 0 14px;
+      height: 46px;
+      display: flex; align-items: center;
+      white-space: nowrap;
+    }
+    .ip-addr {
+      background: var(--surface);
+      font-family: 'Press Start 2P', monospace;
+      font-size: 13px;
+      color: var(--text);
+      padding: 0 20px;
+      height: 46px;
+      display: flex; align-items: center;
+      letter-spacing: 0.05em;
+    }
+    .ip-copy {
+      background: var(--surface2);
+      border: none;
+      color: var(--teal);
+      cursor: pointer;
+      height: 46px;
+      padding: 0 16px;
+      font-size: 18px;
+      display: flex; align-items: center;
+      transition: background 0.2s;
+      border-left: 1px solid var(--border);
+    }
+    .ip-copy:hover { background: var(--teal-glow); }
+    .ip-copy.copied { color: var(--yellow); }
+    .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--teal);
+      color: #0a1a19;
+      font-weight: 900;
+      font-size: 15px;
+      padding: 14px 32px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: filter 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { filter: brightness(1.12); transform: translateY(-2px); }
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid var(--border);
+      color: var(--text);
+      font-weight: 800;
+      font-size: 15px;
+      padding: 13px 32px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-secondary:hover { border-color: var(--teal); background: var(--teal-glow); transform: translateY(-2px); }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .scroll-hint svg { animation: bounce 2s ease-in-out infinite; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+    @keyframes pulse  { 0%,100%{opacity:0.5} 50%{opacity:1} }
+
+    /* ── SECTION ── */
+    section { padding: 90px 48px; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      color: var(--teal);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(18px, 2.5vw, 28px);
+      color: var(--text);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .section-sub {
+      font-size: 16px; font-weight: 600; color: var(--muted);
+      max-width: 560px; line-height: 1.7; margin-bottom: 52px;
+    }
+
+    /* ── GAMEMODES ── */
+    #gamemodes { background: var(--surface); }
+    .modes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .mode-card {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.2s;
+      position: relative;
+    }
+    .mode-card:hover { border-color: var(--teal); transform: translateY(-4px); }
+    .mode-card-art {
+      height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: monospace; font-size: 11px; color: var(--border);
+      position: relative; overflow: hidden;
+    }
+    /* Prison art - dark brick pattern */
+    .art-prison {
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(0,200,192,0.04) 28px, rgba(0,200,192,0.04) 29px),
+        repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0,200,192,0.04) 40px, rgba(0,200,192,0.04) 41px),
+        linear-gradient(135deg, #0e1a1a 0%, #0a1410 100%);
+    }
+    .art-prison::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(0deg, rgba(0,200,192,0.06) 0px, rgba(0,200,192,0.06) 2px, transparent 2px, transparent 30px),
+        repeating-linear-gradient(90deg, rgba(50,50,60,0.3) 0px, rgba(50,50,60,0.3) 40px, transparent 40px, transparent 80px);
+    }
+    /* Survival art */
+    .art-survival {
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(100,200,100,0.04) 28px, rgba(100,200,100,0.04) 29px),
+        linear-gradient(135deg, #0e1a0e 0%, #0a120a 100%);
+    }
+    .art-survival::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(90deg, rgba(50,100,50,0.1) 0px, rgba(50,100,50,0.1) 40px, transparent 40px, transparent 80px);
+    }
+    .art-icon {
+      font-size: 56px;
+      position: relative; z-index: 1;
+      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.5));
+    }
+    .mode-badge {
+      position: absolute; top: 14px; right: 14px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+      z-index: 2;
+    }
+    .badge-soon {
+      background: rgba(0,200,192,0.15);
+      color: var(--teal);
+      border: 1px solid var(--teal);
+    }
+    .badge-maint {
+      background: rgba(224,80,80,0.15);
+      color: var(--red);
+      border: 1px solid var(--red);
+    }
+    .mode-body { padding: 24px; }
+    .mode-name {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .mode-desc {
+      font-size: 14px; font-weight: 600; color: var(--muted); line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .mode-features {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .feat-chip {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px; font-weight: 700;
+      padding: 5px 12px; border-radius: 20px;
+    }
+    .feat-chip.teal { border-color: rgba(0,200,192,0.3); color: var(--teal); background: rgba(0,200,192,0.07); }
+    .mode-status-bar {
+      margin-top: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-soon { background: var(--teal); box-shadow: 0 0 6px var(--teal); animation: blink 1.5s ease-in-out infinite; }
+    .dot-maint { background: var(--red); }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .status-text { font-size: 12px; font-weight: 700; color: var(--muted); }
+
+    /* ── STORE BANNER ── */
+    #store-banner {
+      background: linear-gradient(135deg, #0a1f1e 0%, #0d2420 50%, #0a1a1a 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .store-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 40px; flex-wrap: wrap;
+    }
+    .store-left { flex: 1; min-width: 260px; }
+    .store-right { flex-shrink: 0; display: flex; align-items: center; gap: 16px; }
+    .store-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 20px;
+      color: var(--text);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .store-title span { color: var(--teal); }
+    .store-desc { font-size: 16px; font-weight: 600; color: var(--muted); line-height: 1.7; }
+    .store-currency {
+      display: flex; flex-direction: column; align-items: center;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 32px;
+      text-align: center;
+    }
+    .currency-icon { font-size: 36px; margin-bottom: 8px; }
+    .currency-name {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 11px; color: var(--teal); margin-bottom: 4px;
+    }
+    .currency-desc { font-size: 13px; font-weight: 600; color: var(--muted); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 48px;
+    }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px; flex-wrap: wrap;
+    }
+    .footer-logo {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 13px; color: var(--teal);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .footer-logo img { height: 32px; }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a {
+      color: var(--muted); text-decoration: none; font-weight: 700; font-size: 14px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--teal); }
+    .footer-copy { color: var(--muted); font-size: 13px; font-weight: 600; }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--teal); color: #0a1a19;
+      font-family: 'Press Start 2P', monospace; font-size: 9px;
+      padding: 12px 24px; border-radius: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      z-index: 999; pointer-events: none;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      section { padding: 60px 20px; }
+      footer { padding: 40px 20px; }
+      .store-inner { flex-direction: column; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <img src="uploads/pasted-1776752506358-0.png" alt="TropixMC logo" />
+    TropixMC
+  </a>
+  <div class="nav-links">
+    <a href="#gamemodes">Gamemodes</a>
+    <a href="#store-banner">Store</a>
+    <a href="https://store.tropixmc.net/" target="_blank" class="nav-btn">Visit Store →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <img class="hero-palm" src="uploads/pasted-1776752506358-0.png" alt="TropixMC palm tree" />
+    <p class="hero-tag">☀&nbsp; Tropical Minecraft Network</p>
+    <h1 class="hero-title">WELCOME TO<br><span>TROPIXMC</span></h1>
+    <p class="hero-desc">A custom Minecraft server bringing you one-of-a-kind gamemodes with unique mechanics and tropical vibes.</p>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:24px;">
+      <div class="ip-box">
+        <span class="ip-label">JOIN IP</span>
+        <span class="ip-addr" id="ip-text">play.tropixmc.net</span>
+        <button class="ip-copy" id="ip-btn" title="Copy IP" onclick="copyIP()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </button>
+      </div>
+      <div class="hero-ctas">
+        <a href="https://store.tropixmc.net/" target="_blank" class="btn-primary">🛒 Visit Store</a>
+        <a href="#gamemodes" class="btn-secondary">View Gamemodes</a>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>SCROLL</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </div>
+</div>
+
+<!-- GAMEMODES -->
+<section id="gamemodes">
+  <div class="section-inner">
+    <p class="section-label">★ Gamemodes</p>
+    <h2 class="section-title">WHAT'S COMING</h2>
+    <p class="section-sub">We're building something special. Check out what's in development and what's coming soon to TropixMC.</p>
+    <div class="modes-grid">
+
+      <!-- Prison Block -->
+      <div class="mode-card">
+        <div class="mode-card-art art-prison">
+          <span class="art-icon">⛓️</span>
+          <span class="mode-badge badge-soon">IN DEVELOPMENT</span>
+        </div>
+        <div class="mode-body">
+          <h3 class="mode-name">PRISON BLOCK</h3>
+          <p class="mode-desc">Our flagship gamemode. Mine your way through the ranks in a tropical custom prison experience.</p>
+          <div class="mode-features">
+            <span class="feat-chip teal">Gangs</span>
+            <span class="feat-chip teal">Islands</span>
+            <span class="feat-chip">Fishing</span>
+            <span class="feat-chip">Mines</span>
+            <span class="feat-chip">Fully Custom</span>
+          </div>
+          <div class="mode-status-bar">
+            <span class="status-dot dot-soon"></span>
+            <span class="status-text">In active development, launching soon</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Survival -->
+      <div class="mode-card">
+        <div class="mode-card-art art-survival">
+          <img src="uploads/pasted-1776752506358-0.png" style="height:80px;position:relative;z-index:1;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.5));" alt="Survival" />
+          <span class="mode-badge badge-maint">MAINTENANCE</span>
+        </div>
+        <div class="mode-body">
+          <h3 class="mode-name">SURVIVAL</h3>
+          <p class="mode-desc">Our OG gamemode. Custom survival made for the players, YOU!</p>
+          <div class="mode-features">
+            <span class="feat-chip teal">World Bosses</span>
+            <span class="feat-chip teal">Dungeons</span>
+            <span class="feat-chip">Fully Custom</span>
+          </div>
+          <div class="mode-status-bar">
+            <span class="status-dot dot-maint"></span>
+            <span class="status-text">Currently under maintenance, check back soon</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- STORE BANNER -->
+<section id="store-banner">
+  <div class="store-inner">
+    <div class="store-left">
+      <p class="section-label">🛒 Official Store</p>
+      <h2 class="store-title">SUPPORT THE<br><span>SERVER</span></h2>
+      <p class="store-desc" style="margin-bottom:28px;">Grab Dabloons, rank upgrades, and exclusive cosmetics to power up your TropixMC experience. 100% of proceeds go toward server development.</p>
+      <a href="https://store.tropixmc.net/" target="_blank" class="btn-primary" style="font-size:14px;">Open Store →</a>
+    </div>
+    <div class="store-right">
+      <div class="store-currency">
+        <div class="currency-icon">🪙</div>
+        <div class="currency-name">DABLOONS</div>
+        <div class="currency-desc">Server currency<br>used across all modes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="uploads/pasted-1776752506358-0.png" alt="TropixMC" />
+      TropixMC
+    </div>
+    <div class="footer-links">
+      <a href="https://store.tropixmc.net/" target="_blank">Store</a>
+      <a href="#gamemodes">Gamemodes</a>
+    </div>
+    <div class="footer-copy">© 2026 TropixMC &nbsp;·&nbsp; play.tropixmc.net</div>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div id="toast">IP Copied!</div>
+
+<script>
+  function copyIP() {
+    navigator.clipboard.writeText('play.tropixmc.net').then(() => {
+      const btn = document.getElementById('ip-btn');
+      btn.classList.add('copied');
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => { toast.classList.remove('show'); btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  // Tweaks
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "accentColor": "#00c8c0",
+    "showPalmGlow": true,
+    "heroTagline": "A custom Minecraft server bringing you one-of-a-kind gamemodes with unique mechanics and tropical vibes."
+  }/*EDITMODE-END*/;
+
+  let tweaks = {...TWEAK_DEFAULTS};
+
+  function applyTweaks(t) {
+    document.documentElement.style.setProperty('--teal', t.accentColor);
+    document.documentElement.style.setProperty('--teal-dim', t.accentColor);
+    document.querySelector('.hero-palm').style.filter = t.showPalmGlow
+      ? `drop-shadow(0 0 32px ${t.accentColor}66)` : 'none';
+    document.querySelector('.hero-desc').textContent = t.heroTagline;
+  }
+
+  function buildTweaksPanel() {
+    const panel = document.createElement('div');
+    panel.id = 'tweaks-panel';
+    panel.style.cssText = `
+      position:fixed;bottom:24px;right:24px;z-index:9999;
+      background:#1a1d21;border:1.5px solid #2a3038;border-radius:14px;
+      padding:20px 24px;width:280px;display:none;
+      box-shadow:0 16px 48px rgba(0,0,0,0.5);font-family:'Nunito',sans-serif;
+    `;
+    panel.innerHTML = `
+      <div style="font-family:'Press Start 2P',monospace;font-size:10px;color:#00c8c0;margin-bottom:16px;">TWEAKS</div>
+      <label style="display:block;margin-bottom:14px;">
+        <span style="font-size:12px;font-weight:700;color:#7a8898;display:block;margin-bottom:6px;">ACCENT COLOR</span>
+        <input type="color" id="tw-color" value="${tweaks.accentColor}" style="width:100%;height:36px;border-radius:6px;border:1px solid #2a3038;background:#111;cursor:pointer;">
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer;">
+        <input type="checkbox" id="tw-glow" ${tweaks.showPalmGlow?'checked':''} style="accent-color:#00c8c0;width:16px;height:16px;">
+        <span style="font-size:13px;font-weight:700;color:#e8edf2;">Palm glow effect</span>
+      </label>
+      <label style="display:block;">
+        <span style="font-size:12px;font-weight:700;color:#7a8898;display:block;margin-bottom:6px;">HERO TAGLINE</span>
+        <textarea id="tw-tag" rows="3" style="width:100%;background:#111416;border:1px solid #2a3038;border-radius:6px;color:#e8edf2;font-size:13px;font-family:'Nunito',sans-serif;padding:8px;resize:none;">${tweaks.heroTagline}</textarea>
+      </label>
+    `;
+    document.body.appendChild(panel);
+
+    document.getElementById('tw-color').addEventListener('input', e => {
+      tweaks.accentColor = e.target.value; applyTweaks(tweaks);
+      window.parent.postMessage({type:'__edit_mode_set_keys',edits:{accentColor:tweaks.accentColor}},'*');
+    });
+    document.getElementById('tw-glow').addEventListener('change', e => {
+      tweaks.showPalmGlow = e.target.checked; applyTweaks(tweaks);
+      window.parent.postMessage({type:'__edit_mode_set_keys',edits:{showPalmGlow:tweaks.showPalmGlow}},'*');
+    });
+    document.getElementById('tw-tag').addEventListener('input', e => {
+      tweaks.heroTagline = e.target.value; applyTweaks(tweaks);
+      window.parent.postMessage({type:'__edit_mode_set_keys',edits:{heroTagline:tweaks.heroTagline}},'*');
+    });
+  }
+
+  buildTweaksPanel();
+  applyTweaks(tweaks);
+
+  window.addEventListener('message', e => {
+    if (e.data?.type === '__activate_edit_mode') document.getElementById('tweaks-panel').style.display = 'block';
+    if (e.data?.type === '__deactivate_edit_mode') document.getElementById('tweaks-panel').style.display = 'none';
+  });
+  window.parent.postMessage({type:'__edit_mode_available'},'*');
+</script>
+</body>
+</html>
